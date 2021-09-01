@@ -74,14 +74,44 @@ namespace Assignment3.Controllers
             catch (DbUpdateConcurrencyException)
             {
                 if (!FranchiseExists(id))
-                {
                     return NotFound();
-                }
                 else
-                {
                     throw;
-                }
             }
+            return NoContent();
+        }
+        /// <summary>
+        /// Adds a franchise to database.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult<FranchiseCreateDTO>> PostFranchise(FranchiseCreateDTO dtoFranchise)
+        {
+            Franchise domainFranchise = Mapper.Map<Franchise>(dtoFranchise);
+            Context.Franchises.Add(domainFranchise);
+            await Context.SaveChangesAsync();
+
+            return CreatedAtAction("GetFranchise",
+                new { id = domainFranchise.Id },
+                Mapper.Map<FranchiseReadDTO>(domainFranchise));
+        }
+
+        /// <summary>
+        /// Deletes a franchise.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteFranchise(int id)
+        {
+            var franchise = await Context.Franchises.FindAsync(id);
+
+            if (franchise == null) return NotFound();
+
+            Context.Franchises.Remove(franchise);
+            await Context.SaveChangesAsync();
+
             return NoContent();
         }
 
