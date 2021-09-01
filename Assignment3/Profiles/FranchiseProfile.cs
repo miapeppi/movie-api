@@ -13,7 +13,6 @@ namespace Assignment3.Profiles
         public FranchiseProfile()
         {
             CreateMap<Franchise, FranchiseReadDTO>()
-                // Turning related movies into arrays
                 .ForMember(fdto => fdto.Movies, opt => opt
                 .MapFrom(f => f.Movies.Select(m => m.Id).ToArray()))
                 .ReverseMap();

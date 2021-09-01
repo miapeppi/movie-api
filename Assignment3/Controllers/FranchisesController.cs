@@ -1,6 +1,7 @@
 ﻿using Assignment3.Models;
 using Assignment3.Models.Domain;
 using Assignment3.Models.DTO.Franchise;
+using Assignment3.Models.DTO.Movie;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -115,6 +116,25 @@ namespace Assignment3.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Gets all movies for given Franchise ID
+        /// </summary>
+        /// <param name="id">Franchise's id value as int</param>
+        /// <returns></returns>
+        [HttpGet("{id}/movies")]
+        public async Task<ActionResult<IEnumerable<MovieReadDTO>>> GetFranchiseMovies(int id)
+        {
+            var franchise = await Context.Franchises
+                .Include(f => f.Movies)
+                .FirstOrDefaultAsync(f => f.Id == id);
+
+            if (franchise == null) return NotFound();
+
+            FranchiseReadDTO franchiseDTO = Mapper.Map<FranchiseReadDTO>(franchise);
+            var movies = Context.Movies.Where(movie => franchiseDTO.Movies.Contains(movie.Id));
+
+            return Mapper.Map<List<MovieReadDTO>>(movies);
+        }
 
         /// <summary>
         /// Updates Movies in a Franchise by movie IDs.
@@ -122,38 +142,47 @@ namespace Assignment3.Controllers
         /// <param name="id">ID of Franchise to update</param>
         /// <param name="movieIds">Array of Movie IDs to update in Franchise</param>
         /// <returns></returns>
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutFranchiseMovies(int id, int[] movieIds)
-        //{
-        //    //Get Franchise from database
-        //    var franchise = await Context.Franchises
-        //        .Include(f => f.Movies)
-        //        .FirstOrDefaultAsync(f => f.Id == id);
+        [HttpPut("{id}/movies")]
+        public async Task<IActionResult> PutFranchiseMovies(int id, int[] movieIds)
+        {
+            //Get Franchise from database
+            var franchise = await Context.Franchises
+                .Include(f => f.Movies)
+                .FirstOrDefaultAsync(f => f.Id == id);
 
-        //    //Check if franchise exists
-        //    if (franchise == null) return NotFound();
+            //Check if franchise exists
+            if (franchise == null) return NotFound();
 
-        //    //Map franchise to DTO
-        //    FranchiseReadDTO franchiseDTO = Mapper.Map<FranchiseReadDTO>(franchise);
+            //Get movies with given IDs 
+            var movieIdList = movieIds.Distinct();
+            var movies = Context.Movies.Where(movie => movieIdList.Any(id => id == movie.Id)).ToList();
 
-        //    //Check if movie IDs exist in database
+            //Check if any given IDs of movies do not exist in database
+            var missingIds = movieIdList.Where(id => !movies.Any(movies => movies.Id == id));
 
+            //if (movieIdList.Any(id => !movies.Any(movies => movies.Id == id))) return BadRequest();
 
-        //    //Context.Entry(domainFranchise).State = EntityState.Modified;
+            if (missingIds.Count() > 0)
+            {
+                return BadRequest(missingIds);
+            }
 
-        //    try
-        //    {
-        //        await Context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!FranchiseExists(id))
-        //            return NotFound();
-        //        else
-        //            throw;
-        //    }
-        //    return NoContent();
-        //}
+            franchise.Movies = movies;
+
+            try
+            {
+                await Context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!FranchiseExists(id))
+                    return NotFound();
+                else
+                    throw;
+            }
+
+            return Ok();
+        }
 
         private bool FranchiseExists(int id)
         {
