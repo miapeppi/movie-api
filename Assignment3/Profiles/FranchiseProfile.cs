@@ -18,9 +18,9 @@ namespace Assignment3.Profiles
                 .MapFrom(f => f.Movies.Select(m => m.Id).ToArray()))
                 .ReverseMap();
 
-            CreateMap<Franchise, FranchiseEditDTO>();
+            CreateMap<Franchise, FranchiseEditDTO>().ReverseMap();
 
-            CreateMap<Franchise, FranchiseCreateDTO>();
+            CreateMap<Franchise, FranchiseCreateDTO>().ReverseMap();
         }
     }
 }

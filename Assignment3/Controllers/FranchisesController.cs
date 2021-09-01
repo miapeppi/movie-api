@@ -1,4 +1,5 @@
 ﻿using Assignment3.Models;
+using Assignment3.Models.Domain;
 using Assignment3.Models.DTO.Franchise;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -40,14 +41,53 @@ namespace Assignment3.Controllers
         /// <param name="id">Franchise's id value as int</param>
         /// <returns>Franchise object</returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<FranchiseReadDTO>>> GetFranchise(int id)
+        public async Task<ActionResult<FranchiseReadDTO>> GetFranchise(int id)
         {
-            var franchise = await Context.Franchises.FindAsync(id);
+            var franchise = await Context.Franchises
+                .Include(f => f.Movies)
+                .FirstOrDefaultAsync(f => f.Id == id);
 
             if (franchise == null) return NotFound();
 
-            return Mapper.Map<List<FranchiseReadDTO>>(franchise);
+            return Mapper.Map<FranchiseReadDTO>(franchise);
         }
 
+        /// <summary>
+        /// Updates a franchise in database.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="franchise"></param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutFranchise(int id, FranchiseEditDTO franchise)
+        {
+            if (id != franchise.Id)
+                return BadRequest();
+
+            Franchise domainFranchise = Mapper.Map<Franchise>(franchise);
+            Context.Entry(domainFranchise).State = EntityState.Modified;
+
+            try
+            {
+                await Context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!FranchiseExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return NoContent();
+        }
+
+        private bool FranchiseExists(int id)
+        {
+            return Context.Franchises.Any(e => e.Id == id);
+        }
     }
 }
