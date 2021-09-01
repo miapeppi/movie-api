@@ -115,6 +115,46 @@ namespace Assignment3.Controllers
             return NoContent();
         }
 
+
+        /// <summary>
+        /// Updates Movies in a Franchise by movie IDs.
+        /// </summary>
+        /// <param name="id">ID of Franchise to update</param>
+        /// <param name="movieIds">Array of Movie IDs to update in Franchise</param>
+        /// <returns></returns>
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutFranchiseMovies(int id, int[] movieIds)
+        //{
+        //    //Get Franchise from database
+        //    var franchise = await Context.Franchises
+        //        .Include(f => f.Movies)
+        //        .FirstOrDefaultAsync(f => f.Id == id);
+
+        //    //Check if franchise exists
+        //    if (franchise == null) return NotFound();
+
+        //    //Map franchise to DTO
+        //    FranchiseReadDTO franchiseDTO = Mapper.Map<FranchiseReadDTO>(franchise);
+
+        //    //Check if movie IDs exist in database
+
+
+        //    //Context.Entry(domainFranchise).State = EntityState.Modified;
+
+        //    try
+        //    {
+        //        await Context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!FranchiseExists(id))
+        //            return NotFound();
+        //        else
+        //            throw;
+        //    }
+        //    return NoContent();
+        //}
+
         private bool FranchiseExists(int id)
         {
             return Context.Franchises.Any(e => e.Id == id);
