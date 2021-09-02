@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Assignment3.Models
 {
+    /// <summary>
+    /// Handles database seed data generation and DbContext functionality for all data types.
+    /// </summary>
     public class MovieDbContext : DbContext
     {
         public DbSet<Character> Characters { get; set; }
@@ -16,8 +19,13 @@ namespace Assignment3.Models
         public MovieDbContext(DbContextOptions options) : base(options)
         {
         }
+        /// <summary>
+        /// Creates seed data for all data types and manages relationship functionality.
+        /// </summary>
+        /// <param name="modelBuilder">ModelBuilder object</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //Enable foreign key to be null for maintaining relationship between movie and franchise when deleting movie
             modelBuilder.Entity<Movie>()
                 .HasOne(m => m.Franchise)
                 .WithMany(f => f.Movies)
@@ -84,6 +92,7 @@ namespace Assignment3.Models
                 new Character { Id = 4, FullName = "Gilbert Kane", Alias = "", Gender = "male", Picture = "" }
                 );
 
+            // Seed data for many to many relationship between movies and characters.
             modelBuilder.Entity<Movie>()
                 .HasMany(left => left.Characters)
                 .WithMany(right => right.Movies)
