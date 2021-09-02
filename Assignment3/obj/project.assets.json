@@ -6047,30 +6047,26 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\sebastian.soderholm\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
+    "C:\\Users\\peppi.makela\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\sebastian.soderholm\\source\\repos\\movieapi\\Assignment3\\Assignment3.csproj",
+      "projectUniqueName": "C:\\Users\\peppi.makela\\Documents\\Noroff\\Back-end\\Module3\\Assignment\\Assignment3\\Assignment3\\Assignment3\\Assignment3.csproj",
       "projectName": "Assignment3",
-      "projectPath": "C:\\Users\\sebastian.soderholm\\source\\repos\\movieapi\\Assignment3\\Assignment3.csproj",
-      "packagesPath": "C:\\Users\\sebastian.soderholm\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\sebastian.soderholm\\source\\repos\\movieapi\\Assignment3\\obj\\",
+      "projectPath": "C:\\Users\\peppi.makela\\Documents\\Noroff\\Back-end\\Module3\\Assignment\\Assignment3\\Assignment3\\Assignment3\\Assignment3.csproj",
+      "packagesPath": "C:\\Users\\peppi.makela\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\peppi.makela\\Documents\\Noroff\\Back-end\\Module3\\Assignment\\Assignment3\\Assignment3\\Assignment3\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
-      ],
       "configFilePaths": [
-        "C:\\Users\\sebastian.soderholm\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        "C:\\Users\\peppi.makela\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

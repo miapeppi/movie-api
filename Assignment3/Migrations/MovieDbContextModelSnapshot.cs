@@ -256,7 +256,8 @@ namespace Assignment3.Migrations
                 {
                     b.HasOne("Assignment3.Models.Domain.Franchise", "Franchise")
                         .WithMany("Movies")
-                        .HasForeignKey("FranchiseId");
+                        .HasForeignKey("FranchiseId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Franchise");
                 });

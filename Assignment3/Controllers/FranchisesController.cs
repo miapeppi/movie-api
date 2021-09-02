@@ -187,28 +187,22 @@ namespace Assignment3.Controllers
         /// </summary>
         /// <param name="id">Franchise's id value as int</param>
         /// <returns></returns>
-        //[HttpGet("{id}/characters")]
-        //public async Task<ActionResult<IEnumerable<CharacterReadDTO>>> GetFranchiseCharacters(int id)
-        //{
-        //    var franchise = await Context.Franchises
-        //        .Include(f => f.Movies)
-        //        .FirstOrDefaultAsync(f => f.Id == id);
+        [HttpGet("{id}/characters")]
+        public async Task<ActionResult<IEnumerable<CharacterReadDTO>>> GetFranchiseCharacters(int id)
+        {
+            var franchise = await Context.Franchises
+                .Include(f => f.Movies)
+                .ThenInclude(m => m.Characters)
+                .FirstOrDefaultAsync(f => f.Id == id);
 
-        //    if (franchise == null) return NotFound();
+            if (franchise == null) 
+                return NotFound();
 
-        //    // Get all movies in Franchise
-        //    FranchiseReadDTO franchiseDTO = Mapper.Map<FranchiseReadDTO>(franchise);
-        //    var movies = Context.Movies.Where(movie => franchiseDTO.Movies.Contains(movie.Id));
+            //Get all characters in movie
+            var characters = franchise.Movies.SelectMany(m => m.Characters).Distinct();
 
-        //    //Map MovieReadDTO to get IDs for character lookup
-        //    List<MovieReadDTO> moviesDTO = Mapper.Map<List<MovieReadDTO>>(movies);
-        //    List<int> moviesIDs = moviesDTO.Select(movie => movie.Characters).ToList();
-
-        //    //Get all characters in movie
-        //    var characters = Context.Characters.Where(character => character.Id == moviesDTO.Select(movie => movie.Characters.Contains(character.Id)));
-
-        //    return Mapper.Map<List<CharacterReadDTO>>(characters);
-        //}
+            return Mapper.Map<List<CharacterReadDTO>>(characters);
+        }
 
         private bool FranchiseExists(int id)
         {

@@ -35,6 +35,7 @@ namespace Assignment3.Controllers
                 .Include(m => m.Characters)
                 .ToListAsync());
         }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<MovieReadDTO>> GetMovie(int id)
         {
