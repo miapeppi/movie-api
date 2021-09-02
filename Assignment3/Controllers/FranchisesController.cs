@@ -159,7 +159,7 @@ namespace Assignment3.Controllers
         /// <param name="movieIds">Array of Movie IDs to update in Franchise</param>
         /// <returns>Ok</returns>
         /// <Exception>DbUpdateConcurrencyException</Exception>
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut("{id}/movies")]
