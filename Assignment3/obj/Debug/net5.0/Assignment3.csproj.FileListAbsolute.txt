@@ -124,3 +124,5 @@ C:\Users\peppi.makela\Documents\Noroff\Back-end\Module3\Assignment\Assignment3\A
 C:\Users\peppi.makela\Documents\Noroff\Back-end\Module3\Assignment\Assignment3\Assignment3\Assignment3\obj\Debug\net5.0\ref\Assignment3.dll
 C:\Users\peppi.makela\Documents\Noroff\Back-end\Module3\Assignment\Assignment3\Assignment3\Assignment3\obj\Debug\net5.0\Assignment3.pdb
 C:\Users\peppi.makela\Documents\Noroff\Back-end\Module3\Assignment\Assignment3\Assignment3\Assignment3\obj\Debug\net5.0\Assignment3.genruntimeconfig.cache
+C:\Users\sebastian.soderholm\source\repos\movieapi\Assignment3\bin\Debug\net5.0\Assignment3.xml
+C:\Users\sebastian.soderholm\source\repos\movieapi\Assignment3\obj\Debug\net5.0\Assignment3.xml
