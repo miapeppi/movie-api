@@ -1,5 +1,6 @@
 ﻿using Assignment3.Models;
 using Assignment3.Models.Domain;
+using Assignment3.Models.DTO.Character;
 using Assignment3.Models.DTO.Movie;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,23 @@ namespace Assignment3.Controllers
             if (movie == null) return NotFound();
             return Mapper.Map<MovieReadDTO>(movie);
         }
+
+        [HttpGet("{id}/characters")]
+        public async Task<ActionResult<IEnumerable<CharacterReadDTO>>> GetCharacterMovie(int id)
+        {
+            var movie = await Context.Movies
+                .Include(m => m.Characters)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (movie == null)
+                return NotFound();
+
+            MovieReadDTO movieDTO = Mapper.Map<MovieReadDTO>(movie);
+            var characters = Context.Characters.Where(c => movieDTO.Characters.Contains(c.Id));
+
+            return Mapper.Map<List<CharacterReadDTO>>(characters);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMovie(int id, MovieEditDTO movie)
         {
@@ -84,7 +102,7 @@ namespace Assignment3.Controllers
                 Mapper.Map<MovieReadDTO>(domainMovie));
         }
 
-        [HttpPut("{id}/characters")]
+        [HttpPost("{id}/characters")]
         public async Task<ActionResult> PostCharacters(int id, int[] characterIds)
         {
             var movie = await Context.Movies
@@ -104,5 +122,47 @@ namespace Assignment3.Controllers
             await Context.SaveChangesAsync();
             return Ok();
         }
+
+        [HttpPut("{id}/characters")]
+        public async Task<ActionResult> PutCharacterMovie(int id, int[] characterId)
+        {
+            var movie = await Context.Movies
+                .Include(m => m.Characters)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (movie == null)
+                return NotFound();
+            var charactersIdList = characterId.Distinct();
+            var characters = Context.Characters.Where(c => charactersIdList.Any(id => id == c.Id)).ToList();
+            var missingIds = charactersIdList.Where(id => !characters.Any(characters => characters.Id == id));
+            if (missingIds.Count() > 0)
+                return BadRequest();
+            movie.Characters = characters;
+            try
+            {
+                await Context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!MovieExists(id))
+                    return NotFound();
+                else
+                    throw;
+            }
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMovie(int id)
+        {
+            var movie = await Context.Movies.FindAsync(id);
+
+            if (movie == null) return NotFound();
+
+            Context.Movies.Remove(movie);
+            await Context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
     }
 }
