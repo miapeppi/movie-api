@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 
 namespace Assignment3.Controllers
 {
+    /// <summary>
+    /// Controller class to handle movies API endpoints
+    /// </summary>
     [Route("api/v1/movies")]
     [ApiController]
     [Produces(MediaTypeNames.Application.Json)]
