@@ -15,6 +15,9 @@ using System.Threading.Tasks;
 
 namespace Assignment3.Controllers
 {
+    /// <summary>
+    /// Controller class that handles franchise endpoint logic
+    /// </summary>
     [Route("api/v1/franchises")]
     [ApiController]
     [Produces(MediaTypeNames.Application.Json)]
