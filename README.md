@@ -7,4 +7,4 @@ The RESTful API can be used to create, read, update and delete data from the dat
 - Characters - A character can be a part of multiple movies
 - Franchises - A franchise can have multiple movies
 
-The database can be duplicated through the add-migration, following the Model Creation rules of the MovieDbContext.cs file.
+The database can be duplicated through the add-migration, following the Model Creation rules of the `MovieDbContext.cs` file.
