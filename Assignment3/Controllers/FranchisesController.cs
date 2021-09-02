@@ -33,7 +33,7 @@ namespace Assignment3.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FranchiseReadDTO>>> GetFranchises()
         {
-            return Mapper.Map<List<FranchiseReadDTO>>(await Context.Franchises.ToListAsync());
+            return Mapper.Map<List<FranchiseReadDTO>>(await Context.Franchises.Include(f => f.Movies).ToListAsync());
         }
 
         /// <summary>
@@ -153,14 +153,12 @@ namespace Assignment3.Controllers
             //Check if franchise exists
             if (franchise == null) return NotFound();
 
-            //Get movies with given IDs 
+            //Get movies with given IDs
             var movieIdList = movieIds.Distinct();
             var movies = Context.Movies.Where(movie => movieIdList.Any(id => id == movie.Id)).ToList();
 
-            //Check if any given IDs of movies do not exist in database
+            //Check which given IDs of movies do NOT exist in database
             var missingIds = movieIdList.Where(id => !movies.Any(movies => movies.Id == id));
-
-            //if (movieIdList.Any(id => !movies.Any(movies => movies.Id == id))) return BadRequest();
 
             if (missingIds.Count() > 0)
             {

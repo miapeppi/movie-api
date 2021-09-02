@@ -15,9 +15,7 @@ namespace Assignment3.Models
 
         public MovieDbContext(DbContextOptions options) : base(options)
         {
-
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Franchise>().HasData(new Franchise { Id = 1, Name = "MCU", Description = "Marvel Cinematic Universe. Contains all Marvel superhero movies that share the same universe." });

@@ -71,5 +71,38 @@ namespace Assignment3.Controllers
         {
             return Context.Movies.Any(e => e.Id == id);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<MovieCreateDTO>> PostMovie(MovieCreateDTO dtoMovie)
+        {
+            Movie domainMovie = Mapper.Map<Movie>(dtoMovie);
+            Context.Movies.Add(domainMovie);
+            await Context.SaveChangesAsync();
+
+            return CreatedAtAction("GetMovie",
+                new { id = domainMovie.Id },
+                Mapper.Map<MovieReadDTO>(domainMovie));
+        }
+
+        [HttpPut("{id}/characters")]
+        public async Task<ActionResult> PostCharacters(int id, int[] characterIds)
+        {
+            var movie = await Context.Movies
+                .Include(f => f.Characters)
+                .FirstOrDefaultAsync(f => f.Id == id);
+            if (movie == null) return NotFound();
+
+            var characterIdsList = characterIds.Distinct();
+            var characters = Context.Characters.Where(character => characterIdsList.Any(id => id == character.Id)).ToList();
+
+            var missingIds = characterIds.Where(id => !characters.Any(character => character.Id == id));
+            if (missingIds.Count() > 0)
+            {
+                return BadRequest(missingIds);
+            }
+            movie.Characters = characters;
+            await Context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }
