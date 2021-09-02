@@ -3,6 +3,7 @@ using Assignment3.Models.Domain;
 using Assignment3.Models.DTO.Character;
 using Assignment3.Models.DTO.Movie;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -27,7 +28,12 @@ namespace Assignment3.Controllers
             Context = context;
             Mapper = mapper;
         }
-
+        /// <summary>
+        /// List of all movies.
+        /// </summary>
+        /// <returns>List of movie objects</returns>
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MovieReadDTO>>> GetFranchises()
         {
@@ -35,7 +41,13 @@ namespace Assignment3.Controllers
                 .Include(m => m.Characters)
                 .ToListAsync());
         }
-
+        /// <summary>
+        /// Return movie by id.
+        /// </summary>
+        /// <param name="id">Id of movie to return.</param>
+        /// <returns>Movie object</returns>
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public async Task<ActionResult<MovieReadDTO>> GetMovie(int id)
         {
