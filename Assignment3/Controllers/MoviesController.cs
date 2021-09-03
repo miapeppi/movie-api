@@ -85,6 +85,7 @@ namespace Assignment3.Controllers
         /// Update movie in database.
         /// </summary>
         /// <param name="id">Id of movie to update.</param>
+        /// <param name="movie">Movie object with updated information</param>
         /// <returns>No content</returns>
         /// <Exception>DbUpdateConcurrencyException</Exception>
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -93,10 +94,13 @@ namespace Assignment3.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMovie(int id, MovieEditDTO movie)
         {
-            if (id != movie.Id)
+            //Check if given Id matches object id and FranchiseId matches any existing franchise in DB (null values allowed)
+            if (id != movie.Id || !Context.Franchises.Any(franchise => franchise.Id == movie.FranchiseId) && movie.FranchiseId != null )
                 return BadRequest();
+
             Movie domainMovie = Mapper.Map<Movie>(movie);
             Context.Entry(domainMovie).State = EntityState.Modified;
+
             try
             {
                 await Context.SaveChangesAsync();
@@ -118,13 +122,20 @@ namespace Assignment3.Controllers
         /// <summary>
         /// Add new movie to database
         /// </summary>
-        /// <param name="dtoMovie">Movie object to update in database.</param>
+        /// <param name="dtoMovie">Movie object to update in database. FranchiseId is allowed to be null, but otherwise must match an existin Franchise Id in Franchises table</param>
         /// <returns>No content</returns>
         /// <Exception>DbUpdateConcurrencyException</Exception>
+        /// 
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
         public async Task<ActionResult<MovieCreateDTO>> PostMovie(MovieCreateDTO dtoMovie)
         {
+            //Check if franchise exists for given ID and given ID is not null (null values allowed in DB)
+            if (dtoMovie.FranchiseId != null && !Context.Franchises.Any(franchise => franchise.Id == dtoMovie.FranchiseId)) 
+                return BadRequest();
+
             Movie domainMovie = Mapper.Map<Movie>(dtoMovie);
+
             Context.Movies.Add(domainMovie);
             await Context.SaveChangesAsync();
 
