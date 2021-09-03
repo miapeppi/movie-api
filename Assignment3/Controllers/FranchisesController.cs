@@ -142,6 +142,7 @@ namespace Assignment3.Controllers
         {
             var franchise = await Context.Franchises
                 .Include(f => f.Movies)
+                .ThenInclude(m => m.Characters)
                 .FirstOrDefaultAsync(f => f.Id == id);
 
             if (franchise == null) return NotFound();

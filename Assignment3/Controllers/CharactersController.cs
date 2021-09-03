@@ -38,7 +38,9 @@ namespace Assignment3.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CharacterReadDTO>>> GetCharacters()
         {
-            return Mapper.Map<List<CharacterReadDTO>>(await Context.Characters.ToListAsync());
+            return Mapper.Map<List<CharacterReadDTO>>(await Context.Characters
+                .Include(c => c.Movies)
+                .ToListAsync());
         }
 
         /// <summary>
